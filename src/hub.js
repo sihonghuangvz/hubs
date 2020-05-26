@@ -94,6 +94,7 @@ import "./components/follow-in-fov";
 import "./components/matrix-auto-update";
 import "./components/clone-media-button";
 import "./components/open-media-button";
+import "./components/general-meeting-button";
 import "./components/refresh-media-button";
 import "./components/tweet-media-button";
 import "./components/remix-avatar-button";
@@ -624,8 +625,86 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
       adapter.unreliableTransport = sendViaPhoenix(false);
     });
 
+    function getData() {
+      async function getToken(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': '<calculated when request is sent>',
+            'Host': '<calculated when request is sent>',
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive'
+          },
+          // redirect: 'follow', // manual, *follow, error
+          // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+          body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+      }
+      
+      async function getMeetings(url) 
+      {
+        let response = await fetch(url);
+        let data = await response.json();
+        return data;
+      } 
+      
+      getToken("https://api.bluejeans.com/oauth2/token?User", {
+        "grant_type": "password",
+        "username": "zachary.drossman@verizon.com",
+        "password": "Katsikapes"
+      })
+      .then(data => {
+        const meetingURL = "https://api.bluejeans.com/v1/user/" + data.scope.user + "/scheduled_meeting?access_token=" + data.access_token;
+        getMeetings(meetingURL).then(data => {
+          console.log(data); // JSON data parsed by `response.json()` call
+          const formattedMeetingData = formatMeetingData(data);
+
+          createMeetingButtons(formattedMeetingData);
+        });
+      });
+      
+      function formatMeetingData(meetingData){
+        let i;
+        const meetingDataArr = [];
+        for(i = 0; i < meetingData.length; i++){
+          meetingDataArr.push({
+            title: meetingData[i].title,
+            meetingURL: "https://bluejeans.com/" + meetingData[i].numericMeetingId
+          });
+        }
+
+        return meetingDataArr;
+      }
+    }
+
+    function createMeetingButtons(meetingData) {
+      const meetingBtnsContainer = document.querySelector('#meeting-buttons-container');
+
+      meetingData.forEach((meeting, index) => {
+        meetingBtnsContainer.insertAdjacentHTML('beforeend',
+          `
+            <a-entity 
+              is-remote-hover-target 
+              tags="singleActionButton:true;" 
+              mixin="rounded-text-button" 
+              general-meeting-button="onlyOpenLink: true" 
+              data-meeting-url="${meeting.meetingURL}"
+              position="${1 + index} 2 0.001">
+              <a-entity text="value:${meeting.title}; width:1.75; align:center;" text-raycast-hack position="0 0 0.02"></a-entity>
+            </a-entity>
+          `
+        )
+      });
+    }
+
     const loadEnvironmentAndConnect = () => {
+      getData();
       updateEnvironmentForHub(hub, entryManager);
+
       function onConnectionError() {
         console.error("Unknown error occurred while attempting to connect to networked scene.");
         remountUI({ roomUnavailableReason: "connect_error" });
