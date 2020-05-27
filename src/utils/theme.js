@@ -34,10 +34,24 @@ waitForDOMContentLoaded().then(() => {
   const actionColor = getThemeColor("action-color");
   const actionHoverColor = getThemeColor("action-color-highlight");
 
+  if (document.querySelector("#event-meeting-button")) {
+    document
+    .querySelector("#event-meeting-button")
+    .setAttribute(
+      "text-button",
+      `textHoverColor: #ffffff;
+       textColor: #ffffff;
+       backgroundColor: #000000; 
+       backgroundHoverColor: red;
+      `
+    );
+  }
+
   if (document.querySelector("#rounded-text-button")) {
     // NOTE, using the object-based {} setAttribute variant in a-frame
     // seems to not work in Firefox here -- the entities with the mixins are not
     // updated.
+
     document
       .querySelector("#rounded-text-button")
       .setAttribute(

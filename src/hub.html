@@ -57,6 +57,7 @@
             <img id="presence-count" crossorigin="anonymous" src="./assets/hud/presence-count.png">
             <img id="action-button" crossorigin="anonymous" src="./assets/hud/action_button.9.png">
             <img id="button" crossorigin="anonymous" src="./assets/hud/button.9.png">
+            <img id="verizon-logo-white" src="./assets/images/verizon-logo-white.svg">
 
             <a-asset-item id="drawing-pen" response-type="arraybuffer" src="./assets/models/DrawingPen.glb"></a-asset-item>
             <a-asset-item id="spawn-point" response-type="arraybuffer" src="./assets/models/spawn-point.glb"></a-asset-item>
@@ -921,6 +922,18 @@
                 </a-entity>
             </template>
 
+            <a-mixin id="event-meeting-button"
+                slice9="
+                    width: 3.25;
+                    height: 0.2;
+                    left: 64;
+                    top: 64;
+                    right: 66;
+                    bottom: 66;
+                    opacity: .5;
+                    src: #button"
+            ></a-mixin>
+
             <a-mixin id="rounded-text-button"
                 slice9="
                     width: 0.45;
@@ -987,21 +1000,30 @@
                     src: #button"
             ></a-mixin>
         </a-assets>
-
-        <a-entity
+        
+        <a-entity 
             id="meeting-buttons-container" 
             class="interactable" 
             body-helper="type: dynamic; mass: 1; collisionFilterGroup: 1; collisionFilterMask: 15;" owned-object-limiter="counter: #media-counter" 
-            set-unowned-body-kinematic 
-            is-remote-hover-target tags="isHandCollisionTarget: true; isHoldable: true; offersHandConstraint: true; offersRemoteConstraint: true; inspectable: true;"
+            set-unowned-body-kinematic
+            tags="isHandCollisionTarget: true; isHoldable: false; offersHandConstraint: true; offersRemoteConstraint: true; inspectable: true;"
             destroy-at-extreme-distances 
-            scalable-when-grabbed 
             floaty-object="modifyGravityOnRelease: true; autoLockOnLoad: true;" 
             set-yxz-order 
             matrix-auto-update 
-            hoverable-visuals 
             listed-media 
-            use-audio-system-settings>
+            use-audio-system-settings
+            geometry="primitive: box; height: 2.25; depth: 0.1; width: 4" 
+            position="2 3 0" 
+            material="color: #000000">
+                <a-image 
+                    src="#verizon-logo-white" 
+                    position="1.70 1 0.06"
+                    height=".1"
+                    width=".46"></a-image>
+                <a-entity text="value:Meetings; font: roboto; width:4; align:center; letter-spacing: 1; color: #ffffff" text-raycast-hack position="0 0.95 0.1"></a-entity>
+                <a-entity 
+                    line="start: -0.38, .83, 0.1; end: 0.4 .83 0.1; color: #ffffff"></a-entity>
         </a-entity>
 
         <!-- HACK - We use this object to trigger initial batch preparation -->

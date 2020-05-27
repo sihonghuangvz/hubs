@@ -690,11 +690,11 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
             <a-entity 
               is-remote-hover-target 
               tags="singleActionButton:true;" 
-              mixin="rounded-text-button" 
+              mixin="event-meeting-button" 
               general-meeting-button="onlyOpenLink: true" 
               data-meeting-url="${meeting.meetingURL}"
-              position="${1 + index} 2 0.001">
-              <a-entity text="value:${meeting.title}; width:1.75; align:center;" text-raycast-hack position="0 0 0.02"></a-entity>
+              position="0 ${.65 - index/4} 0.1">
+              <a-entity text="value:${meeting.title}; font: roboto; width:3; align:center; letter-spacing: 1" text-raycast-hack position="0 0 0.02"></a-entity>
             </a-entity>
           `
         )
