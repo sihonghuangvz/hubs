@@ -687,13 +687,20 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
       meetingData.forEach((meeting, index) => {
         meetingBtnsContainer.insertAdjacentHTML('beforeend',
           `
-            <a-entity 
-              is-remote-hover-target 
-              tags="singleActionButton:true;" 
-              mixin="event-meeting-button" 
-              general-meeting-button="onlyOpenLink: true" 
-              data-meeting-url="${meeting.meetingURL}"
-              position="0 ${.65 - index/4} 0.1">
+          <a-entity 
+          is-remote-hover-target 
+          tags="singleActionButton:true;" 
+          mixin="event-meeting-button" 
+          general-meeting-button="onlyOpenLink: true" 
+          data-meeting-url="${meeting.meetingURL}"
+          position="0 ${.5 - index/4} 0.1">
+              <a-image 
+                src="#meeting-icon"
+                position="-1.5 -0.025 0.1"
+                width="0.15"
+                height="0.15"
+                color="red"
+                material="color:red;"></a-image>
               <a-entity text="value:${meeting.title}; font: roboto; width:3; align:center; letter-spacing: 1" text-raycast-hack position="0 0 0.02"></a-entity>
             </a-entity>
           `

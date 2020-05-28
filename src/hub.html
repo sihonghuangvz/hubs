@@ -58,6 +58,7 @@
             <img id="action-button" crossorigin="anonymous" src="./assets/hud/action_button.9.png">
             <img id="button" crossorigin="anonymous" src="./assets/hud/button.9.png">
             <img id="verizon-logo-white" src="./assets/images/verizon-logo-white.svg">
+            <img id="meeting-icon" src="./assets/images/meeting-icon.svg">
 
             <a-asset-item id="drawing-pen" response-type="arraybuffer" src="./assets/models/DrawingPen.glb"></a-asset-item>
             <a-asset-item id="spawn-point" response-type="arraybuffer" src="./assets/models/spawn-point.glb"></a-asset-item>
@@ -924,7 +925,7 @@
 
             <a-mixin id="event-meeting-button"
                 slice9="
-                    width: 3.25;
+                    width: 2.75;
                     height: 0.2;
                     left: 64;
                     top: 64;
@@ -1023,7 +1024,13 @@
                     width=".46"></a-image>
                 <a-entity text="value:Meetings; font: roboto; width:4; align:center; letter-spacing: 1; color: #ffffff" text-raycast-hack position="0 0.95 0.1"></a-entity>
                 <a-entity 
-                    line="start: -0.38, .83, 0.1; end: 0.4 .83 0.1; color: #ffffff"></a-entity>
+                    line="start: -0.38, .83, 0.08; end: 0.4 .83 0.08; color: #ffffff"></a-entity>
+                <!-- <a-entity 
+                    line="start: -0.38, .83, 0.1; end: 0.4 .83 0.1; color: #ffffff"
+                    line__2="start: -1.7, .67, 0.1; end: 1.7 .67 0.1; color: red; opacity: 0.5"
+                    line__3="start: -1.7, -.93, 0.1; end: 1.7 -.93 0.1; color: red; opacity: 0.5"
+                    line__4="start: -1.7, .67, 0.1; end: -1.7 -.93 0.1; color: red; opacity: 0.5"
+                    line__5="start: 1.7, .67, 0.1; end: 1.7 -.93 0.1; color: red; opacity: 0.5"></a-entity> -->
         </a-entity>
 
         <!-- HACK - We use this object to trigger initial batch preparation -->
