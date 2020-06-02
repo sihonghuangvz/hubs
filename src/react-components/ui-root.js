@@ -461,6 +461,7 @@ class UIRoot extends Component {
 
   onSceneLoaded = () => {
     this.setState({ sceneLoaded: true });
+    this.findOwner();
   };
 
   // TODO: we need to come up with a cleaner way to handle the shared state between aframe and react than emmitting events and setting state on the scene
@@ -823,7 +824,6 @@ class UIRoot extends Component {
     const muteOnEntry = this.props.store.state.preferences["muteMicOnEntry"] || false;
     await this.props.enterScene(this.state.mediaStream, this.state.enterInVR, muteOnEntry);
 
-    this.findOwner();
     this.setState({ entered: true, entering: false, showShareDialog: false });
 
     const mediaStream = this.state.mediaStream;
