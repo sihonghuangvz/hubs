@@ -220,7 +220,6 @@ import { getAvailableVREntryTypes, VR_DEVICE_AVAILABILITY, ONLY_SCREEN_AVAILABLE
 import detectConcurrentLoad from "./utils/concurrent-load-detector";
 
 import qsTruthy from "./utils/qs_truthy";
-import { WindowsMixedRealityControllerDevice } from "./systems/userinput/devices/windows-mixed-reality-controller";
 
 const PHOENIX_RELIABLE_NAF = "phx-reliable";
 NAF.options.firstSyncSource = PHOENIX_RELIABLE_NAF;
@@ -1553,7 +1552,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   hubPhxChannel.on("message", ({ session_id, type, body, from }) => {
-    
+
     const getAuthor = () => {
       const userInfo = hubChannel.presence.state[session_id];
       if (from) {
