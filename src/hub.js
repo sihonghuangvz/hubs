@@ -160,6 +160,8 @@ import "./gltf-component-mappings";
 
 import { App } from "./App";
 
+import { processRPC } from './message-receiver.js';
+
 window.APP = new App();
 window.APP.RENDER_ORDER = {
   HUD_BACKGROUND: 1,
@@ -1553,7 +1555,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   hubPhxChannel.on("message", ({ session_id, type, body, from }) => {
-    console.log(body);
+
     if (body.includes('custom')) {
       const event = body.split(':')[1];
       
@@ -1576,11 +1578,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const incomingMessage = { name, type, body, maySpawn, sessionId: session_id };
 
-    if (scene.is("vr-mode")) {
-      createInWorldLogMessage(incomingMessage);
+    if (body.charAt(0) === "$") {  
+      processRPC(body);
+    } else {
+      if (scene.is("vr-mode")) {
+        createInWorldLogMessage(incomingMessage);
+      }
+
+      addToPresenceLog(incomingMessage);
     }
 
-    addToPresenceLog(incomingMessage);
   });
 
   hubPhxChannel.on("hub_refresh", ({ session_id, hubs, stale_fields }) => {
