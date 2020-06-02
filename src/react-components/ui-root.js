@@ -508,8 +508,7 @@ class UIRoot extends Component {
       }
     };
 
-    window.APP.hubChannel.sendMessage('custom:muteAll');
-    window.APP.hubChannel.isMuteAll = true;
+    window.APP.hubChannel.sendMessage('$muteAll');
   }
   
 

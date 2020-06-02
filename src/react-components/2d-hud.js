@@ -47,7 +47,6 @@ class TopHUD extends Component {
   static propTypes = {
     scene: PropTypes.object,
     muted: PropTypes.bool,
-    isMuteAll: PropTypes.bool,
     isCursorHoldingPen: PropTypes.bool,
     hasActiveCamera: PropTypes.bool,
     frozen: PropTypes.bool,
@@ -270,7 +269,7 @@ class TopHUD extends Component {
 
     const micLevel = this.state.micLevel;
     const micIcon = MIC_ICONS[this.props.muted ? "off" : "on"][micLevel];
-    const isMuteAll =  window.APP.customEvents.muteAll;
+    const isMuteAll =  window.APP.store.state.preferences.isMuteAll;
     const isOwner = window.APP.componentRegistry["player-info"][0].isOwner;
 
     // Hide buttons when frozen.
@@ -291,6 +290,7 @@ class TopHUD extends Component {
             </div>
             { isOwner ? (
               <div
+                id="mute-all-btn"
                 className={cx(styles.iconButton)}
                 title="Mute All"
                 onClick={this.props.onMuteAll}>

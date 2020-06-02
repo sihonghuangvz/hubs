@@ -645,12 +645,9 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
     });
 
     const loadEnvironmentAndConnect = () => {
-      // const state = window.APP.hubChannel.presence.state;
-      // const sessionIds = Object.getOwnPropertyNames(state);
-
-      // for (const sessionId of sessionIds) {
-      //   window.APP.hubChannel.addOwner(sessionId);
-      // }
+      window.APP.store.update({
+        preferences: { isMuteAll: false }
+      });
 
       updateEnvironmentForHub(hub, entryManager);
       function onConnectionError() {
@@ -1555,13 +1552,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   hubPhxChannel.on("message", ({ session_id, type, body, from }) => {
-
-    if (body.includes('custom')) {
-      const event = body.split(':')[1];
-      
-      return window.APP.customEvents[event] = true;
-    }
-
     const getAuthor = () => {
       const userInfo = hubChannel.presence.state[session_id];
       if (from) {
