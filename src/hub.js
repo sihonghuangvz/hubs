@@ -1256,6 +1256,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   const hubPhxChannel = socket.channel(`hub:${hubId}`, createHubChannelParams(oauthFlowPermsToken));
+
   const presenceLogEntries = [];
   const addToPresenceLog = entry => {
     entry.key = Date.now().toString();
@@ -1552,6 +1553,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   hubPhxChannel.on("message", ({ session_id, type, body, from }) => {
+    
     const getAuthor = () => {
       const userInfo = hubChannel.presence.state[session_id];
       if (from) {

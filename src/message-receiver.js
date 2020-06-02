@@ -9,7 +9,7 @@ export function processRPC(command) {
             toggleIntercomAudio();
           break;
         case "$muteAll":
-          handleMessageMuteAll();
+          toggleMuteAll();
           break;
     }
 }
@@ -22,8 +22,8 @@ function toggleIntercomAudio(){
   });
 
 }
-
-function handleMessageMuteAll() {
+``
+function toggleMuteAll() {
   const isOwner = window.APP.componentRegistry["player-info"][0].isOwner;
   const isMuteAll = window.APP.store.state.preferences.isMuteAll;
   
