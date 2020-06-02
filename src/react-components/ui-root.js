@@ -478,6 +478,36 @@ class UIRoot extends Component {
     this.setState({ showVideoShareFailed: true });
   };
 
+  findOwner = () => {
+    const state = window.APP.hubChannel.presence.state;
+    const sessionIds = Object.getOwnPropertyNames(state);
+
+    for (const sessionId of sessionIds) {
+      const isOwner = state[sessionId].metas[0].roles.owner;
+
+      if (isOwner && !this.state.owner) {
+        this.setState({ ownerId: sessionId });
+      }
+    }
+  }
+  
+  muteAll = () => {
+    const state = window.APP.hubChannel.presence.state;
+    const sessionIds = Object.getOwnPropertyNames(state);
+    
+    for (const sessionId of sessionIds) {
+      const isOwner = sessionId === this.state.ownerId;
+      
+      if (!isOwner) {
+        window.APP.hubChannel.mute(sessionId);
+      }
+    };
+
+    window.APP.hubChannel.sendMessage('custom:muteAll');
+    window.APP.hubChannel.isMuteAll = true;
+  }
+  
+
   toggleMute = () => {
     this.props.scene.emit("action_mute");
   };
@@ -803,6 +833,7 @@ class UIRoot extends Component {
     const muteOnEntry = this.props.store.state.preferences["muteMicOnEntry"] || false;
     await this.props.enterScene(this.state.mediaStream, this.state.enterInVR, muteOnEntry);
 
+    this.findOwner();
     this.setState({ entered: true, entering: false, showShareDialog: false });
 
     const mediaStream = this.state.mediaStream;
@@ -2143,6 +2174,7 @@ class UIRoot extends Component {
                   activeTip={this.props.activeTips && this.props.activeTips.top}
                   isCursorHoldingPen={this.props.isCursorHoldingPen}
                   hasActiveCamera={this.props.hasActiveCamera}
+                  onMuteAll={this.muteAll}
                   onToggleMute={this.toggleMute}
                   onSpawnPen={this.spawnPen}
                   onSpawnCamera={() => this.props.scene.emit("action_toggle_camera")}

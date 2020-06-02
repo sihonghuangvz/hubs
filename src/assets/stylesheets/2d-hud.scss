@@ -224,3 +224,8 @@
 :local(.iconButton.video-share) {
   position: relative;
 }
+
+.hud-btn-disabled-state {
+  opacity: 0.5;
+  pointer-events: none;
+}

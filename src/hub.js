@@ -217,6 +217,7 @@ import { getAvailableVREntryTypes, VR_DEVICE_AVAILABILITY, ONLY_SCREEN_AVAILABLE
 import detectConcurrentLoad from "./utils/concurrent-load-detector";
 
 import qsTruthy from "./utils/qs_truthy";
+import { WindowsMixedRealityControllerDevice } from "./systems/userinput/devices/windows-mixed-reality-controller";
 
 const PHOENIX_RELIABLE_NAF = "phx-reliable";
 NAF.options.firstSyncSource = PHOENIX_RELIABLE_NAF;
@@ -625,6 +626,13 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
     });
 
     const loadEnvironmentAndConnect = () => {
+      // const state = window.APP.hubChannel.presence.state;
+      // const sessionIds = Object.getOwnPropertyNames(state);
+
+      // for (const sessionId of sessionIds) {
+      //   window.APP.hubChannel.addOwner(sessionId);
+      // }
+
       updateEnvironmentForHub(hub, entryManager);
       function onConnectionError() {
         console.error("Unknown error occurred while attempting to connect to networked scene.");
@@ -1227,7 +1235,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   const hubPhxChannel = socket.channel(`hub:${hubId}`, createHubChannelParams(oauthFlowPermsToken));
-
   const presenceLogEntries = [];
   const addToPresenceLog = entry => {
     entry.key = Date.now().toString();
@@ -1512,6 +1519,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   hubPhxChannel.on("message", ({ session_id, type, body, from }) => {
+    console.log(body);
+    if (body.includes('custom')) {
+      const event = body.split(':')[1];
+      
+      return window.APP.customEvents[event] = true;
+    }
+
     const getAuthor = () => {
       const userInfo = hubChannel.presence.state[session_id];
       if (from) {
