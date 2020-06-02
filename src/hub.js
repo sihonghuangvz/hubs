@@ -644,6 +644,10 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
     });
 
     const loadEnvironmentAndConnect = () => {
+      window.APP.store.update({
+        preferences: { isMuteAll: false }
+      });
+
       updateEnvironmentForHub(hub, entryManager);
       function onConnectionError() {
         console.error("Unknown error occurred while attempting to connect to networked scene.");

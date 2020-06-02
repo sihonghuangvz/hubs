@@ -57,6 +57,7 @@ class TopHUD extends Component {
     hideVideoShareFailedTip: PropTypes.func,
     activeTip: PropTypes.string,
     history: PropTypes.object,
+    onMuteAll: PropTypes.func,
     onToggleMute: PropTypes.func,
     onSpawnPen: PropTypes.func,
     onSpawnCamera: PropTypes.func,
@@ -268,6 +269,9 @@ class TopHUD extends Component {
 
     const micLevel = this.state.micLevel;
     const micIcon = MIC_ICONS[this.props.muted ? "off" : "on"][micLevel];
+    const isMuteAll =  window.APP.store.state.preferences.isMuteAll;
+    const isOwner = window.APP.componentRegistry["player-info"][0].isOwner;
+
     // Hide buttons when frozen.
     return (
       <div className={cx(styles.container, styles.top, styles.unselectable, uiStyles.uiInteractive)}>
@@ -278,12 +282,22 @@ class TopHUD extends Component {
             {tip}
             {videoSharingButtons}
             <div
-              className={cx(styles.iconButton)}
+              className={`${cx(styles.iconButton)} ${isMuteAll && !isOwner ? "hud-btn-disabled-state" : ""}`}
               title={this.props.muted ? "Unmute Mic" : "Mute Mic"}
               onClick={this.props.onToggleMute}
             >
               <InlineSVG className={cx(styles.iconButtonIcon)} src={micIcon} />
             </div>
+            { isOwner ? (
+              <div
+                id="mute-all-btn"
+                className={cx(styles.iconButton)}
+                title="Mute All"
+                onClick={this.props.onMuteAll}>
+                <InlineSVG className={cx(styles.iconButtonIcon)} src={MicOff0} />
+              </div>
+              ) : null 
+            }
             <div
               className={cx(styles.iconButton, {
                 [styles.disabled]: this.state.mediaDisabled

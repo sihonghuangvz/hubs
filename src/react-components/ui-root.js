@@ -461,6 +461,7 @@ class UIRoot extends Component {
 
   onSceneLoaded = () => {
     this.setState({ sceneLoaded: true });
+    this.findOwner();
   };
 
   // TODO: we need to come up with a cleaner way to handle the shared state between aframe and react than emmitting events and setting state on the scene
@@ -482,6 +483,35 @@ class UIRoot extends Component {
   onShareVideoFailed = () => {
     this.setState({ showVideoShareFailed: true });
   };
+
+  findOwner = () => {
+    const state = window.APP.hubChannel.presence.state;
+    const sessionIds = Object.getOwnPropertyNames(state);
+
+    for (const sessionId of sessionIds) {
+      const isOwner = state[sessionId].metas[0].roles.owner;
+
+      if (isOwner && !this.state.owner) {
+        this.setState({ ownerId: sessionId });
+      }
+    }
+  }
+  
+  muteAll = () => {
+    const state = window.APP.hubChannel.presence.state;
+    const sessionIds = Object.getOwnPropertyNames(state);
+    
+    for (const sessionId of sessionIds) {
+      const isOwner = sessionId === this.state.ownerId;
+      
+      if (!isOwner) {
+        window.APP.hubChannel.mute(sessionId);
+      }
+    };
+
+    window.APP.hubChannel.sendMessage('$muteAll');
+  }
+  
 
   toggleMute = () => {
     this.props.scene.emit("action_mute");
@@ -2146,6 +2176,7 @@ class UIRoot extends Component {
                   activeTip={this.props.activeTips && this.props.activeTips.top}
                   isCursorHoldingPen={this.props.isCursorHoldingPen}
                   hasActiveCamera={this.props.hasActiveCamera}
+                  onMuteAll={this.muteAll}
                   onToggleMute={this.toggleMute}
                   onSpawnPen={this.spawnPen}
                   onSpawnCamera={() => this.props.scene.emit("action_toggle_camera")}
